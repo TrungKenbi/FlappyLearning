@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NeuroEvolution : Flappy Bird</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Oswald"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style>
+      div:focus {
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div tabindex="1">
+      <canvas id="flappy" width="512" height="512"></canvas>
+    </div>
+    <button onclick="speed(60)">x1</button>
+    <button onclick="speed(0)">MAX</button>
+    <br />
+    <script src="Neuroevolution.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>
