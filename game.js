@@ -24,10 +24,11 @@
 
 var Neuvol;
 var game;
-var FPS = 28;
+var FPS = 60;
 var maxScore = 0;
 
 var images = {};
+var configBird = {};
 
 var iii = 0;
 
@@ -35,10 +36,18 @@ var speed = function (fps) {
   FPS = parseInt(fps);
 };
 
-var loadImages = function (sources, callback) {
+var loadImages = function (sources, config, callback) {
   var nb = 0;
   var loaded = 0;
   var imgs = {};
+
+  var birdAnim = [];
+  for (var i = 0; i < config.numAnimations; i++) {
+    birdAnim[i] = new Image();
+    birdAnim[i].src = config.birdPath + '/' + (i + 1) + '.png';
+  }
+  imgs.bird = birdAnim;
+
   for (var i in sources) {
     nb++;
     imgs[i] = new Image();
@@ -55,8 +64,8 @@ var loadImages = function (sources, callback) {
 var Bird = function (json) {
   this.x = 80;
   this.y = 250;
-  this.width = 40;
-  this.height = 30;
+  this.width = 50;
+  this.height = 25;
 
   this.alive = true;
   this.gravity = 0;
@@ -131,6 +140,7 @@ var Game = function () {
   this.score = 0;
   this.container = document.querySelector('div');
   this.canvas = document.querySelector("#flappy");
+  this.canvas.width = window.innerWidth;
   this.ctx = this.canvas.getContext("2d");
   this.width = this.canvas.width;
   this.height = this.canvas.height;
@@ -289,6 +299,10 @@ Game.prototype.display = function () {
 
   this.ctx.fillStyle = "#FFC600";
   this.ctx.strokeStyle = "#CE9E00";
+
+  let animSpeed = configBird.numAnimations >= 2 ? (configBird.numAnimations * 5 * 1.5) : 75;
+  let animPos = Math.ceil(((iii % animSpeed) + 1) / (animSpeed / configBird.numAnimations)) - 1;
+
   for (var i in this.birds) {
     if (this.birds[i].alive) {
       this.ctx.save();
@@ -298,7 +312,7 @@ Game.prototype.display = function () {
       );
       this.ctx.rotate(((Math.PI / 2) * this.birds[i].gravity) / 20);
       this.ctx.drawImage(
-        iii % 40 >= 20 ? images.bird : images.bird2,
+        images.bird[animPos],
         -this.birds[i].width / 2,
         -this.birds[i].height / 2,
         this.birds[i].width,
@@ -312,17 +326,14 @@ Game.prototype.display = function () {
 
   this.ctx.fillStyle = "white";
   this.ctx.font = "20px Oswald, sans-serif";
-  this.ctx.fillText("Score : " + (((this.score - 55) / 100) | 0), 10, 25);
-  this.ctx.fillText("Max Score : " + (((this.maxScore - 55) / 100) | 0), 10, 50);
-  this.ctx.fillText("Generation : " + this.generation, 10, 75);
+  this.ctx.fillText("Điểm : " + (((this.score - 55) / 100) | 0), 10, 25);
+  this.ctx.fillText("Điểm cao : " + (((this.maxScore - 55) / 100) | 0), 10, 50);
+  this.ctx.fillText("Thế hệ : " + this.generation, 10, 75);
   this.ctx.fillText(
-    "Alive : " + this.alives + " / " + Neuvol.options.population,
+    "Sống : " + this.alives + " / " + Neuvol.options.population,
     10,
     100
   );
-
-  if (this.score > 200000)
-    FPS = 60;
 
   var self = this;
   requestAnimationFrame(function () {
@@ -331,9 +342,51 @@ Game.prototype.display = function () {
 };
 
 window.onload = function () {
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const petId = urlParams.get('pet');
+
+  if (petId == null)
+    petId = 2;
+
+  var dataPets = [
+    // Bird
+    {
+      birdPath: "./img/bird",
+      numAnimations: 1,
+    },
+    // Kiby
+    {
+      birdPath: "./img/kiby",
+      numAnimations: 2,
+    },
+    // Nyan Cat
+    {
+      birdPath: "./img/nyancat",
+      numAnimations: 12,
+    },
+    // Pikachu
+    {
+      birdPath: "./img/pikachu",
+      numAnimations: 2,
+    },
+    // Vet
+    {
+      birdPath: "./img/vet",
+      numAnimations: 1,
+    },
+    // Doraemon
+    {
+      birdPath: "./img/doraemon",
+      numAnimations: 1,
+    },
+  ];
+
+  var _configBird = dataPets[petId];
+
   var sprites = {
-    bird: "./img/kibi.png",
-    bird2: "./img/kibi2.png",
+    // bird: "./img/kibi.png",
+    // bird2: "./img/kibi2.png",
     background: "./img/background.png",
     pipetop: "./img/pipetop.png",
     pipebottom: "./img/pipebottom.png",
@@ -341,7 +394,7 @@ window.onload = function () {
 
   var start = function () {
     Neuvol = new Neuroevolution({
-      population: 5,
+      population: 10,
       network: [2, [2], 1],
     });
     game = new Game();
@@ -350,8 +403,9 @@ window.onload = function () {
     game.display();
   };
 
-  loadImages(sprites, function (imgs) {
+  loadImages(sprites, _configBird, function (imgs) {
     images = imgs;
+    configBird = _configBird;
     start();
   });
 };
