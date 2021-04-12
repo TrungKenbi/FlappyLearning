@@ -417,7 +417,6 @@ var Neuroevolution = function (options) {
 	 */
 	var Generations = function () {
 		this.generations = [];
-		var currentGeneration = new Generation();
 	}
 
 	/**
@@ -429,24 +428,7 @@ var Neuroevolution = function (options) {
 	 * @return First Generation.
 	 */
 	Generations.prototype.firstGeneration = function (input, hiddens, output) {
-		// FIXME input, hiddens, output unused.
-
-		var model = {
-			neurons: [
-				2,
-				2,
-				1
-			],
-			weights: [
-				0.4317012177699924,
-				0.02705699123171068,
-				-1.0993327222926097,
-				1.6452328461100796,
-				0.31068792290451896,
-				-0.34276681798426667,
-			]
-		};
-		
+		// FIXME input, hiddens, output unused.		
 		var out = [];
 		for (var i = 0; i < self.options.population; i++) {
 			// Generate the Network and save it.

@@ -200,7 +200,6 @@ Game.prototype.update = function () {
       if (this.birds[i].isDead(this.height, this.pipes)) {
         this.birds[i].alive = false;
         this.alives--;
-        //console.log(this.alives);
         Neuvol.networkScore(this.gen[i], this.score);
         if (this.isItEnd()) {
           this.start();
@@ -344,7 +343,7 @@ Game.prototype.display = function () {
 window.onload = function () {
 
   const urlParams = new URLSearchParams(window.location.search);
-  const petId = urlParams.get('pet');
+  let petId = urlParams.get('pet');
 
   if (petId == null)
     petId = 2;
@@ -385,8 +384,6 @@ window.onload = function () {
   var _configBird = dataPets[petId];
 
   var sprites = {
-    // bird: "./img/kibi.png",
-    // bird2: "./img/kibi2.png",
     background: "./img/background.png",
     pipetop: "./img/pipetop.png",
     pipebottom: "./img/pipebottom.png",
@@ -394,7 +391,7 @@ window.onload = function () {
 
   var start = function () {
     Neuvol = new Neuroevolution({
-      population: 10,
+      population: 100,
       network: [2, [2], 1],
     });
     game = new Game();
