@@ -32,6 +32,8 @@ var configBird = {};
 
 var iii = 0;
 
+var debug = false;
+
 var speed = function (fps) {
   FPS = parseInt(fps);
 };
@@ -175,6 +177,8 @@ Game.prototype.start = function () {
   this.alives = this.birds.length;
 };
 
+var genMaxScore = 0;
+
 Game.prototype.update = function () {
   this.backgroundx += this.backgroundSpeed;
   var nextHoll = 0;
@@ -187,26 +191,46 @@ Game.prototype.update = function () {
     }
   }
 
+  var x1;
+  var x2;
+  var y = false;
+
   for (var i in this.birds) {
+    
     if (this.birds[i].alive) {
-      var inputs = [this.birds[i].y / this.height, nextHoll];
+      x1 = this.birds[i].y / this.height;
+      x2 = nextHoll;
+      var inputs = [x1, nextHoll];
+      
 
       var res = this.gen[i].compute(inputs);
       if (res > 0.5) {
         this.birds[i].flap();
-      }
+        y = true;
+      } else
+        y = false;
 
       this.birds[i].update();
       if (this.birds[i].isDead(this.height, this.pipes)) {
         this.birds[i].alive = false;
         this.alives--;
+        if (this.score > genMaxScore)
+          genMaxScore = this.score;
         Neuvol.networkScore(this.gen[i], this.score);
         if (this.isItEnd()) {
+          console.log(this.generation, (((genMaxScore - 55) / 100) | 0));
+          // console.log('Thế hệ: ' + this.generation);
+          // console.log('Điểm tối đa: ' + (((genMaxScore - 55) / 100) | 0));
+          genMaxScore = 0;
           this.start();
         }
       }
     }
+    
   }
+
+  if (debug)
+    console.log(x1, x2, y);
 
   for (var i = 0; i < this.pipes.length; i++) {
     this.pipes[i].update();
@@ -379,6 +403,11 @@ window.onload = function () {
       birdPath: "./img/doraemon",
       numAnimations: 1,
     },
+    // Doraemon
+    {
+      birdPath: "./img/hieu",
+      numAnimations: 1,
+    },
   ];
 
   var _configBird = dataPets[petId];
@@ -391,7 +420,7 @@ window.onload = function () {
 
   var start = function () {
     Neuvol = new Neuroevolution({
-      population: 100,
+      population: 40,
       network: [2, [2], 1],
     });
     game = new Game();

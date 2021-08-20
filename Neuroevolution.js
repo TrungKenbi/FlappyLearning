@@ -427,16 +427,31 @@ var Neuroevolution = function (options) {
 	 * @param {output} Output layer.
 	 * @return First Generation.
 	 */
-	Generations.prototype.firstGeneration = function (input, hiddens, output) {
-		// FIXME input, hiddens, output unused.		
+	Generations.prototype.firstGeneration = function () {
 		var out = [];
+
+		var useTrainedData = false;
+		var trainedData = {
+			neurons: [2, 2, 1],
+			weights: [-1.3279275382395195,
+				1.4669916683114081,
+				0.4644324411366636,
+				-0.32352884092069734,
+				-0.3040421961800388,
+				0.26100668010532213]
+		};
+
 		for (var i = 0; i < self.options.population; i++) {
 			// Generate the Network and save it.
+			if (useTrainedData) {
+				out.push(trainedData);
+				continue;
+			}
 			var nn = new Network();
 			nn.perceptronGeneration(self.options.network[0],
 				self.options.network[1],
 				self.options.network[2]);
-			// nn.setSave(model);
+				
 			out.push(nn.getSave());
 		}
 

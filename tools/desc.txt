@@ -1,0 +1,30 @@
+1. Mô tả bộ dữ liệu:
+	Bộ dữ liệu gồm có 3 cột
+	Current height of bird: Chiều cao hiện tại của nhân vật
+	Next pipeline height: Chiều cao của đường ống tiếp theo
+	Flap?: Nhãn, dùng để quyết định nhân vật có nên đập cánh hay không?
+	
+2. Cách làm:
+	- Xây dựng game Flappy Bird trên web
+	- Cài đặt mạng nơ ron để dự đoán nhân vật có nên đập cánh hay không, dựa vào dữ liệu đầu vào.
+	- Cài đặt thêm giải thuật di truyền để cải thiện độ chính xác của mô hình dự đoán qua từng thế hệ.
+	- Thêm nhiều nhân vật khác nhau Pikachu, Doremon, Nyan Cat, ... để game sinh động hơn.
+	
+3. Kết quả đạt được:
+	Tìm hiểu và cài thành công giải thuật di truyền để áp dụng vào tựa game Flappy Bird.
+	Nhân vật có thể tự học cách chơi sau khoảng 10 thế hệ, sau đó nhân vật có thể tự chơi và tự cải thiện kỹ năng theo thời gian.
+	
+4. Đánh giá thuật toán
+	- Độ chính xác của mô hình sau khi đã được đào tạo là: 99,25%
+	- Cách thức đánh giá: k-fold cross validation, với k = 150 (bằng với số epoch)
+	
+	- Với số lượng cá thể trong quần thể là 40: thì mô hình bắt đầu có hiệu quả ở kể từ thế hệ 73 trở lên (điểm số tăng vọt so và nhân vật không bị rơi trong thời gian dài -  hơn 30 phút và điểm số đạt hơn 200.000 điểm và không có dấu hiệu dừng lại).
+	- Thuật toán tối ưu tốt, không mất quá nhiều thời gian để đạt được mô hình có chất lượng tốt, giải quyết tốt trò chơi Flappy Bird (2 tham số đầu vào), nhưng khi áp dụng với các trò chơi khác cần nhiều tham số đầu (> 10 tham số) vào thì thời gian để đạt được mô hình có chất lượng tốt vẫn còn rất lớn.
+5. So sánh các đề tài các sử dụng cùng thuật toán
+	- Một số đề tài khác sử dụng cùng thuật toán như:
+		1. Evolved antenna: Tối ưu hình dạng của ăng-ten để tăng khả năng thu sóng.
+			- 
+		2. Lập lịch xưởng làm việc: Tối ưu lịch làm việc của một xưởng để tối đa hóa năng xuất làm việc của xưởng và giảm chi phí.
+			-
+		3. Hệ thống điều khiển xe ô tô tự học hỏi: Hệ thống sẽ tự tìm hiểu và học hỏi cách điều khiển xe và ngày càng thông minh hơn.
+			-
