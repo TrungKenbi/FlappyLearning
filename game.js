@@ -420,7 +420,7 @@ window.onload = function () {
 
   var start = function () {
     Neuvol = new Neuroevolution({
-      population: 40,
+      population: 100,
       network: [2, [2], 1],
     });
     game = new Game();
